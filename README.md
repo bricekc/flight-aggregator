@@ -37,7 +37,7 @@ The goal of the api is to get every flight to a destination and sort it by :
 - `docker compose build`
 - `docker compose up`
 ###### linux : 
-- `docker compose -f Docker-compose.yml up`
+- `docker compose -f Docker-compose.yml up --build`
 
 ## test 
 - `make test`
