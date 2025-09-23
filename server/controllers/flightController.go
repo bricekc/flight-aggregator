@@ -3,14 +3,16 @@ package controllers
 import (
 	"aggregator/repositories"
 	"fmt"
-	"html"
 	"net/http"
 )
 
-var travellings1 = &repositories.Travellings1{}
-
 func GetFlights(w http.ResponseWriter, r *http.Request) {
-	travellings1.FlightS1()
+	var travellings1 = &repositories.Travelling1{}
+	flights, err := travellings1.GetTravel()
 	fmt.Println("Request here")
-	fmt.Fprintf(w, "Hell, %q", html.EscapeString(r.URL.Path))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	fmt.Fprintf(w, "%+v", flights)
 }
