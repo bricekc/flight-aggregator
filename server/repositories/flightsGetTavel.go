@@ -1,4 +1,8 @@
-package services
+package repositories
+
+type Repos interface {
+	GetTravel() Travellings
+}
 
 type Flight struct {
 	Number string
