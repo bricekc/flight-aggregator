@@ -8,8 +8,8 @@ import (
 
 func main() {
 	router := http.NewServeMux()
-	router.Handle("/api/health/", http.StripPrefix("/api/health", controllers.HealthRouter()))
-	router.Handle("/api/flight/", http.StripPrefix("/api/flight", controllers.FlightRouter()))
+	router.HandleFunc("/api/health/", controllers.GetHealth)
+	router.HandleFunc("/api/flight/", controllers.GetFlights)
 
 	server := http.Server{
 		Addr:    ":3001",

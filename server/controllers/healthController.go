@@ -6,12 +6,6 @@ import (
 	"net/http"
 )
 
-func HealthRouter() *http.ServeMux {
-	router := http.NewServeMux()
-	router.HandleFunc("GET /", GetHealth)
-	return router
-}
-
 func GetHealth(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Request here")
 	fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
