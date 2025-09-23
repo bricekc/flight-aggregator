@@ -4,8 +4,7 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package main
 
 import (
-	"fmt"
-	"html"
+	"controllers"
 	"log"
 	"net/http"
 )
@@ -13,10 +12,8 @@ import (
 func main() {
 
 	router := http.NewServeMux()
-	router.HandleFunc("GET /api/health", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Request here")
-		fmt.Fprintf(w, "Hello, %q", html.EscapeString((r.URL.Path)))
-	})
+	router.Handle("/api/health/", http.StripPrefix("/api/health", controllers.HealthRouter()))
+	router.Handle("/api/flight/", http.StripPrefix("/api/flight", controllers.Router()))
 
 	server := http.Server{
 		Addr: ":3001",
