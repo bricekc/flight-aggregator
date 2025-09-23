@@ -1,6 +1,10 @@
 package controllers
 
-import "net/http"
+import (
+	"fmt"
+	"html"
+	"net/http"
+)
 
 func HealthRouter() *http.ServeMux {
 	router := http.NewServeMux()
@@ -8,7 +12,7 @@ func HealthRouter() *http.ServeMux {
 	return router
 }
 
-func GetHealth(res http.ResponseWriter, _ *http.Request) {
+func GetHealth(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Request here")
-	fmt.Fprintf(w, "Hell, %q", html.EscapeString((r.URL.Path)))
+	fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
 }

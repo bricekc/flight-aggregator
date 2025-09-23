@@ -1,27 +1,20 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package main
 
 import (
-	"controllers"
+	"aggregator/controllers"
 	"log"
 	"net/http"
 )
 
 func main() {
-
 	router := http.NewServeMux()
 	router.Handle("/api/health/", http.StripPrefix("/api/health", controllers.HealthRouter()))
-	router.Handle("/api/flight/", http.StripPrefix("/api/flight", controllers.Router()))
+	router.Handle("/api/flight/", http.StripPrefix("/api/flight", controllers.FlightRouter()))
 
 	server := http.Server{
-		Addr: ":3001",
+		Addr:    ":3001",
+		Handler: router,
 	}
-
 	log.Println("Server start on : http://localhost:3001")
-
-	err := server.ListenAndServe()
-
-	log.Fatalln(err)
+	log.Fatal(server.ListenAndServe())
 }
