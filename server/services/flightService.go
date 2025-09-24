@@ -3,7 +3,6 @@ package services
 import (
 	"aggregator/repositories"
 	"aggregator/utils"
-	"fmt"
 	"slices"
 	"sort"
 	"time"
@@ -49,9 +48,8 @@ func sortBy(sortType string, orderby string, allTravellings []repositories.Trave
 	case "departure_date":
 		sortByDepartureDate(allTravellings, orderby)
 	default:
-		fmt.Println("default")
+		sortByPrice(allTravellings, orderby)
 	}
-	fmt.Println("sort => ", sortType)
 }
 
 func sortByPrice(allTravellings []repositories.Travelling, orderBy string) {
