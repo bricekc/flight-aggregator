@@ -5,16 +5,18 @@ import (
 )
 
 func TestTernary(t *testing.T) {
-	// given
-	cond := true
-	a := "It's true !"
-	b := "It's false !"
-	// when
-	result := Ternary(cond, a, b)
+	t.Run("should ternary return true", func(t *testing.T) {
+		// given
+		cond := true
+		a := "It's true !"
+		b := "It's false !"
+		// when
+		result := Ternary(cond, a, b)
 
-	// then
-	expected := a
-	if result != expected {
-		t.Errorf("expected %q but got %q", expected, result)
-	}
+		// then
+		expected := a
+		if result != expected {
+			t.Errorf("expected %q but got %q", expected, result)
+		}
+	})
 }

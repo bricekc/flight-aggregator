@@ -71,18 +71,37 @@ func sortByDepartureDate(allTravellings []repositories.Travelling, orderBy strin
 
 func sortByTimeTravel(allTravellings []repositories.Travelling, orderBy string) {
 	sort.SliceStable(allTravellings, func(i, j int) bool {
-		flightsI := allTravellings[i].Flights
-		timeIDepart, _ := time.Parse(time.RFC3339, flightsI[0].Depart)
-		timeIArrive, _ := time.Parse(time.RFC3339, flightsI[len(flightsI)-1].Arrive)
-		timeIDiff := timeIArrive.Sub(timeIDepart)
+		var iTime time.Time
+		for _, v := range allTravellings[i].Flights {
+			arriveTime, _ := time.Parse(time.RFC3339, v.Arrive)
+			departTime, _ := time.Parse(time.RFC3339, v.Depart)
+			diff := arriveTime.Sub(departTime)
+			iTime = iTime.Add(diff)
+		}
 
-		flightsJ := allTravellings[j].Flights
-		timeJDepart, _ := time.Parse(time.RFC3339, flightsJ[0].Depart)
-		timeJArrive, _ := time.Parse(time.RFC3339, flightsJ[len(flightsJ)-1].Arrive)
-		timeJDiff := timeJArrive.Sub(timeJDepart)
+		var jTime time.Time
+		for _, v := range allTravellings[j].Flights {
+			arriveTime, _ := time.Parse(time.RFC3339, v.Arrive)
+			departTime, _ := time.Parse(time.RFC3339, v.Depart)
+			diff := arriveTime.Sub(departTime)
+			jTime = jTime.Add(diff)
+		}
 
-		orderedResult := utils.Ternary(orderBy == "asc", timeIDiff > timeJDiff, timeIDiff < timeJDiff)
+		orderedResult := utils.Ternary(orderBy == "desc", iTime.After(jTime), jTime.After(iTime))
 
 		return orderedResult
+		// flightsI := allTravellings[i].Flights
+		// timeIDepart, _ := time.Parse(time.RFC3339, flightsI[0].Depart)
+		// timeIArrive, _ := time.Parse(time.RFC3339, flightsI[len(flightsI)-1].Arrive)
+		// timeIDiff := timeIArrive.Sub(timeIDepart)
+
+		// flightsJ := allTravellings[j].Flights
+		// timeJDepart, _ := time.Parse(time.RFC3339, flightsJ[0].Depart)
+		// timeJArrive, _ := time.Parse(time.RFC3339, flightsJ[len(flightsJ)-1].Arrive)
+		// timeJDiff := timeJArrive.Sub(timeJDepart)
+
+		// orderedResult := utils.Ternary(orderBy == "asc", timeIDiff > timeJDiff, timeIDiff < timeJDiff)
+
+		// return orderedResult
 	})
 }
