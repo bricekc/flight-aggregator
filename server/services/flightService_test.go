@@ -85,6 +85,7 @@ func TestSortByTimeTravel(t *testing.T) {
 }
 
 func TestSortByPriceASC(t *testing.T) {
+	t.Run("should sort by price asc", func(t *testing.T) {
     // given
     travellings := []repositories.Travelling{
         {Total: repositories.Total{Price: 300}},
@@ -101,14 +102,12 @@ func TestSortByPriceASC(t *testing.T) {
     sortByPrice(travellings, "asc")
 
     // then
-    for i, result := range travellings {
-        if result.Total.Price != expected[i].Total.Price {
-            t.Errorf("Expected price %f at index %d, got %f", expected[i].Total.Price, i, result.Total.Price)
-        }
-    }
+	assert.Equal(t, travellings, expected, "The two Travelling should be in the same order after asc price sorting")
+})
 }
 
 func TestSortByPriceDESC(t *testing.T) {
+	t.Run("should sort by price desc", func(t *testing.T) {
     // given
     travellings := []repositories.Travelling{
         {Total: repositories.Total{Price: 300}},
@@ -125,14 +124,12 @@ func TestSortByPriceDESC(t *testing.T) {
     sortByPrice(travellings, "desc")
 
     // then
-    for i, result := range travellings {
-        if result.Total.Price != expected[i].Total.Price {
-            t.Errorf("Expected price %f at index %d, got %f", expected[i].Total.Price, i, result.Total.Price)
-        }
-    }
+	assert.Equal(t, travellings, expected, "The two Travelling should be in the same order after desc price sorting")
+})
 }
 
 func TestSortByDepartureDateASC(t *testing.T) {
+	t.Run("should sort by departure date asc", func(t *testing.T) {
     // given
     travellings := []repositories.Travelling{
         {Flights: []repositories.Flight{{Depart: "2006-01-01T15:05:05Z"},},},
@@ -149,14 +146,12 @@ func TestSortByDepartureDateASC(t *testing.T) {
     sortByDepartureDate(travellings, "asc")
 
     //then
-    for i, result := range travellings {
-        if result.Flights[0].Depart != expected[i].Flights[0].Depart {
-            t.Errorf("Expected departure date %s at index %d, got %s", expected[i].Flights[0].Depart, i, result.Flights[0].Depart)
-        }
-    }
+	assert.Equal(t, travellings, expected, "The two Travelling should be in the same order after asc departure date sorting")
+})
 }
 
 func TestSortByDepartureDateDESC(t *testing.T) {
+		t.Run("should sort by departure date desc", func(t *testing.T) {
     // given
     travellings := []repositories.Travelling{
         {Flights: []repositories.Flight{{Depart: "2006-01-01T15:05:05Z"},},},
@@ -173,9 +168,6 @@ func TestSortByDepartureDateDESC(t *testing.T) {
     sortByDepartureDate(travellings, "desc")
 
     //then
-    for i, result := range travellings {
-        if result.Flights[0].Depart != expected[i].Flights[0].Depart {
-            t.Errorf("Expected departure date %s at index %d, got %s", expected[i].Flights[0].Depart, i, result.Flights[0].Depart)
-        }
-    }
+	assert.Equal(t, travellings, expected, "The two Travelling should be in the same order after desc departure date sorting")
+})
 }
