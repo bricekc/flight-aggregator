@@ -64,8 +64,7 @@ func sortByDepartureDate(allTravellings []repositories.Travelling, orderBy strin
 	sort.Slice(allTravellings, func(i, j int) bool {
 		timeI, _ := time.Parse(time.RFC3339, allTravellings[i].Flights[0].Depart)
 		timeJ, _ := time.Parse(time.RFC3339, allTravellings[j].Flights[0].Depart)
-		utils.Ternary(orderBy == "asc", timeI.Before(timeJ), timeI.After(timeJ))
-		return timeI.Before(timeJ)
+		return utils.Ternary(orderBy == "asc", timeI.Before(timeJ), timeI.After(timeJ))
 	})
 }
 
