@@ -12,9 +12,12 @@ func GetFlights(res http.ResponseWriter, req *http.Request) {
 	var travellings1 = &repositories.Travelling1{}
 	var travellings2 = &repositories.Travelling2{}
 
+	sortByParam := req.URL.Query().Get("sortby")
+	orderByParam := req.URL.Query().Get("orderby")
+
 	// Initiate service and get datas
 	flightService := services.NewFlightService(travellings1, travellings2)
-	allTravellings := flightService.GetAllTravel()
+	allTravellings := flightService.GetAllTravel(sortByParam, orderByParam)
 
 	// Transform the data in json
 	jsonStrAllTravellings, err := json.Marshal(allTravellings)
