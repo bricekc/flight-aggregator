@@ -1,7 +1,7 @@
 package repositories
 
 type Repos interface {
-	GetTravel() Travellings
+	GetTravel() ([]Travelling, error)
 }
 
 type Flight struct {
@@ -23,8 +23,4 @@ type Travelling struct {
 	PassengerName string
 	Flights       []Flight
 	Total         Total
-}
-
-type Travellings struct {
-	Travellings []Travelling
 }
