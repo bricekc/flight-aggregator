@@ -29,12 +29,12 @@ func (r *Travelling1) GetTravel() ([]Travelling, error) {
 		return []Travelling{}, err2
 	}
 
-	return ToTravellings(data), nil
+	return toTravellings1(data), nil
 }
 
-func ToTravellings(Travellings1 []Travelling1) []Travelling {
+func toTravellings1(travellings1 []Travelling1) []Travelling {
 	var travellings []Travelling
-	for _, t := range Travellings1 {
+	for _, t := range travellings1 {
 		travellings = append(travellings, Travelling{
 		BookingId:     t.BookingId,
 		Status:        t.Status,
