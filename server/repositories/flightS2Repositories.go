@@ -3,19 +3,20 @@ package repositories
 import (
 	"encoding/json"
 	"net/http"
+	"os"
 )
 
 type Travelling2 struct {
 	Reference string
-	Status string
-	Traveler Traveler
-	Segments []Segment
-	Total Total2
+	Status    string
+	Traveler  Traveler
+	Segments  []Segment
+	Total     Total2
 }
 
 type Traveler struct {
 	FirstName string
-	LastName string
+	LastName  string
 }
 
 type Segment struct {
@@ -24,19 +25,19 @@ type Segment struct {
 
 type Flight2 struct {
 	Number string
-	from string
-	to string
+	from   string
+	to     string
 	Depart string
 	Arrive string
 }
 
 type Total2 struct {
-	Amount float64
+	Amount   float64
 	Currency string
 }
 
 func (r *Travelling2) GetTravel() ([]Travelling, error) {
-		res, err := http.Get("http://j-server2:4002/flight_to_book")
+	res, err := http.Get(os.Getenv("JSERVER2_URL"))
 	if err != nil {
 		return []Travelling{}, err
 	}
@@ -48,7 +49,6 @@ func (r *Travelling2) GetTravel() ([]Travelling, error) {
 
 	return toTravellings2(data), nil
 }
-
 
 func toTravellings2(travellings2 []Travelling2) []Travelling {
 	var travellings []Travelling
@@ -78,20 +78,3 @@ func toTravellings2(travellings2 []Travelling2) []Travelling {
 	}
 	return travellings
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

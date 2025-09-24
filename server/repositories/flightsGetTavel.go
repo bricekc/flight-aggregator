@@ -1,7 +1,7 @@
 package repositories
 
 type Repos interface {
-	GetTravel() []Travelling
+	GetTravel() ([]Travelling, error)
 }
 
 type Flight struct {
