@@ -1,3 +1,9 @@
+# Projet de :
+- Fatat TARRAF
+- Brice KUCA
+- Mohamed DIAG
+- Corentin CLERO
+
 # Flight Aggregator
 
 Une application Go qui agrège les données de vols provenant de deux sources externes et offre une API pour consulter et trier les vols par différents critères.
