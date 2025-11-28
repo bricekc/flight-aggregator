@@ -1,60 +1,152 @@
 # Flight Aggregator
 
-The goal of the api is to get every flight to a destination and sort it by : 
-    - price,
-    - departure date
-    - travel time
-  
-# exercices : 
-- create a server
-- set 2 routes:
-  - GET /health : to verify the healthiness of the server 
-    - set the status response to 200 : w.WriteHeader(http.StatusCreated)
-  - GET /flight.
-- try to get the data of both apis from the server (client requests).
-  - transform the data into structs
-  - and organize the code to process the data in 2 repositories and extract the data using the same interface.
-- return the flights orders by price
-- now you want to sort by price, time_travel or departure_date :
-  - pass this information by query/params or body,
-  - create the algorithms,
-  - verify the output
-- Create tests for :
-  - your sorting algorithms,
-  - your flight service :
-    - mock the repositories to make the tests.
+Une application Go qui agrège les données de vols provenant de deux sources externes et offre une API pour consulter et trier les vols par différents critères.
 
-# to help you
+## Vue d'ensemble
 
-## pre-setup
+Flight Aggregator récupère les données de vols à partir de deux serveurs d'API externes (j-server1 et j-server2), les unifie dans une structure commune, et fournit une API REST pour accéder aux vols avec différentes options de tri.
 
-  - install Docker Compose and start the project with: docker compose up
-  - air is setup to auto reload the project on every modification !
-  - a make file is here to run the tests with gotestsum :
-    - install it with : `go install gotest.tools/gotestsum@latest`
+**Critères de tri disponibles:**
+- Prix (croissant/décroissant)
+- Date de départ (croissant/décroissant)
+- Durée du voyage (croissant/décroissant)
 
-## Run the base project: 
-- `docker compose build`
-- `docker compose up`
-###### linux : 
-- `docker compose -f Docker-compose.yml up --build`
+## Architecture
 
-## test 
-- `make test`
+L'application suit une architecture en couches :
 
-## access the apis : 
-- j-server1 :
-  - docker : http://j-server1:4001
-  - localhost : http://localhost:4001
-- j-server2 : 
-  - docker : http://j-server2:4001
-  - localhost : http://localhost:4001
+```
+Controllers (Points d'entrée HTTP)
+    ↓
+Services (Logique métier)
+    ↓
+Repositories (Accès aux données externes)
+```
 
+- **Controllers** : Gèrent les requêtes HTTP et les réponses
+- **Services** : Contiennent la logique métier (agrégation et tri des vols)
+- **Repositories** : Récupèrent les données des API externes et les transforment en structures Go
 
-startup : 
-- use the Viper library [Link Text](https://github.com/spf13/viper),
-- get every env variables with : viper.AutomaticEnv() 
-- then select with : viper.Get("MY_VAR")
+## Prérequis
 
-tests : 
-- use Testify : [Link Text](https://github.com/stretchr/testify)
+- **Docker** et **Docker Compose** (pour l'exécution complète)
+- **Go** 1.20+ (pour le développement local)
+- **GNU Make** (pour exécuter les commandes)
+- `gotestsum` (pour les tests avec formattage personnalisé) : `go install gotest.tools/gotestsum@latest`
+
+### Dépendances Go
+
+Les dépendances principales sont listées dans `go.mod` :
+- Spf13 Viper (gestion des variables d'environnement)
+- Stretchr Testify (framework de test)
+
+## Installation et configuration
+
+### 1. Cloner le projet
+
+```bash
+git clone <repository-url>
+cd flight-aggregator
+```
+
+### 2. Configurer les variables d'environnement
+
+Créez un fichier `.env` à la racine du projet ou utilisez les variables d'environnement du système :
+
+```env
+SERVER_PORT=3001
+JSERVER1_PORT=4001
+JSERVER1_NAME=j-server1
+JSERVER2_PORT=4002
+JSERVER2_NAME=j-server2
+JSERVER1_URL=http://j-server1:4001
+JSERVER2_URL=http://j-server2:4002
+```
+
+### 3. Démarrer l'application avec Docker Compose
+
+```bash
+# Construire et démarrer les conteneurs
+docker compose up --build
+
+# Ou sur Linux
+docker compose -f Docker-compose.yml up --build
+```
+
+L'application démarre avec :
+- **Serveur principal** : http://localhost:3001
+- **j-server1** : http://localhost:4001
+- **j-server2** : http://localhost:4002
+
+## Utilisation
+
+### Vérifier l'état du serveur
+
+```bash
+curl http://localhost:3001/api/health
+```
+
+Réponse : `200 OK`
+
+### Récupérer les vols
+
+```bash
+curl "http://localhost:3001/api/flight?sortby=price&orderby=asc"
+```
+
+## API Endpoints
+
+### GET `/api/health`
+
+Vérifie la disponibilité et l'état du serveur.
+
+**Réponse :**
+```
+Status: 200 OK
+Body: "OK"
+```
+
+### GET `/api/flight`
+
+Récupère la liste de tous les vols agrégés des deux sources, avec option de tri.
+
+**Paramètres de requête :**
+| Paramètre | Type | Description | Valeurs |
+|-----------|------|-------------|---------|
+| `sortby` | string | Critère de tri | `price`, `departureDate`, `travelTime` |
+| `orderby` | string | Ordre de tri | `asc` (croissant), `desc` (décroissant) |
+
+**Exemple de requête :**
+```bash
+# Trier par prix en ordre croissant
+curl "http://localhost:3001/api/flight?sortby=price&orderby=asc"
+
+# Trier par date de départ en ordre décroissant
+curl "http://localhost:3001/api/flight?sortby=departureDate&orderby=desc"
+
+# Trier par durée du voyage
+curl "http://localhost:3001/api/flight?sortby=travelTime&orderby=asc"
+```
+
+## Tests
+
+### Exécuter tous les tests
+
+```bash
+make test
+```
+
+Cette commande exécute les tests avec `gotestsum` pour une meilleure lisibilité du résultat.
+
+### Exécuter les tests directement
+
+```bash
+go test ./...
+```
+
+### Tests couverts
+
+- **Tri par prix** : Vérification que les vols sont correctement ordonnés par tarif
+- **Tri par date de départ** : Vérification que les vols sont correctement ordonnés par heure de départ
+- **Tri par durée** : Vérification que les vols sont correctement ordonnés par durée du voyage
+- **Service de vol** : Tests unitaires avec mocks des repositories
