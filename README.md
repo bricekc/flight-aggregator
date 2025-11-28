@@ -1,4 +1,4 @@
-# Projet de :
+# Project by :
 - Fatat TARRAF
 - Brice KUCA
 - Mohamed DIAG
