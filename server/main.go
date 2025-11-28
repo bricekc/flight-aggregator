@@ -4,6 +4,7 @@ import (
 	"aggregator/controllers"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -12,7 +13,7 @@ func main() {
 	router.HandleFunc("/api/flight", controllers.GetFlights)
 
 	server := http.Server{
-		Addr:    ":3001",
+		Addr:    ":" + os.Getenv("SERVER_PORT"),
 		Handler: router,
 	}
 	log.Println("Server start on : http://localhost:3001")
