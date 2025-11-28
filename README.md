@@ -51,7 +51,7 @@ Les dépendances principales sont listées dans `go.mod` :
 ### 1. Cloner le projet
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:bricekc/flight-aggregator.git
 cd flight-aggregator
 ```
 
